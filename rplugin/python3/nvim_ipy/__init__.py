@@ -302,7 +302,7 @@ class IPythonPlugin(object):
         self.handle(msg_id, None)
 
     @neovim.function("IPyConnect", sync=True)
-    def ipy_connect(self, args=(), async=True):
+    def ipy_connect(self, args=(), async_=True):
         self.configure()
 
         window = True
@@ -315,7 +315,7 @@ class IPythonPlugin(object):
         self.create_outbuf(window)
         # 'connect' waits for kernelinfo, and so must be async
         # unless requested otherwise
-        if async:
+        if async_:
             Async(self).connect(args)
         else:
             self.connect(args)
@@ -326,7 +326,7 @@ class IPythonPlugin(object):
         silent = bool(args[1]) if len(args) > 1 else False
 
         if self.km is None:
-            self.ipy_connect(async=False)
+            self.ipy_connect(async_=False)
 
         if self.km and not self.km.is_alive():
             choice = int(self.vim.funcs.confirm('Kernel died. Restart?', '&Yes\n&No'))
